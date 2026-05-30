@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Axis Visa — Tourist visa support</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+  html, body { margin: 0; }
+  body { background: var(--paper); }
+  ::selection { background: var(--stamp-tint); }
+  #scrollroot { scrollbar-width: thin; }
+  *:focus-visible { outline: 2px solid var(--stamp); outline-offset: 2px; }
+  html.ax-tweaking * { transition: none !important; }
+  /* responsive collapses */
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr !important; }
+    .who-grid { grid-template-columns: 1fr 1fr !important; }
+    .refusal-grid { grid-template-columns: 1fr 1fr !important; }
+    .why-grid { grid-template-columns: 1fr !important; }
+    .why-cells { grid-template-columns: 1fr 1fr !important; }
+    .offer-grid { grid-template-columns: 1fr !important; }
+    .founder-grid { grid-template-columns: 1fr !important; }
+    .nav-links { display: none !important; }
+  }
+  @media (max-width: 600px) {
+    .who-grid { grid-template-columns: 1fr !important; }
+    .refusal-grid { grid-template-columns: 1fr !important; }
+    .why-cells { grid-template-columns: 1fr !important; }
+    .offer-lists { grid-template-columns: 1fr !important; gap: 28px !important; }
+    .proc-row { grid-template-columns: 52px 1fr !important; }
+    .proc-ic { display: none !important; }
+  }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="image-slot.js"></script>
+</head>
+<body class="axis">
+<div id="root"></div>
+
+<script type="text/babel" src="reveal.jsx"></script>
+<script type="text/babel" src="primitives.jsx"></script>
+<script type="text/babel" src="chrome.jsx"></script>
+<script type="text/babel" src="sections-a.jsx"></script>
+<script type="text/babel" src="sections-visa.jsx"></script>
+<script type="text/babel" src="sections-b.jsx"></script>
+<script type="text/babel" src="precheck.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const ACCENTS = {
+  Emerald:    { stamp: "#11C08C", deep: "#0A9067", tint: "#DBF6EC" },
+  Terracotta: { stamp: "#C8663B", deep: "#A24E2A", tint: "#F2E0D5" },
+  Ocean:      { stamp: "#2F6FED", deep: "#2057C9", tint: "#DEE8FD" },
+};
+const GROUNDS = {
+  "Bright white": { paper: "#FFFFFF", paper2: "#F2F4F9", card: "#FFFFFF", line: "#E6E9F0", lineStrong: "#D3D7E1" },
+  "Warm cream":   { paper: "#F8F2E8", paper2: "#EFE7D8", card: "#FCF8F0", line: "#E8DDCB", lineStrong: "#D9CBB4" },
+};
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accent": "Ocean",
+  "ground": "Bright white",
+  "reduceMotion": false
+}/*EDITMODE-END*/;
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [scrolled, setScrolled] = useState(false);
+  const [modal, setModal] = useState(false);
+
+  // apply accent + ground tokens to :root
+  useEffect(() => {
+    const a = ACCENTS[t.accent] || ACCENTS.Emerald;
+    const g = GROUNDS[t.ground] || GROUNDS["Bright white"];
+    const r = document.documentElement.style;
+    r.setProperty("--stamp", a.stamp);
+    r.setProperty("--stamp-deep", a.deep);
+    r.setProperty("--stamp-tint", a.tint);
+    r.setProperty("--atlas", a.deep);
+    r.setProperty("--atlas-tint", a.tint);
+    r.setProperty("--paper", g.paper);
+    r.setProperty("--paper-2", g.paper2);
+    r.setProperty("--card", g.card);
+    r.setProperty("--line", g.line);
+    r.setProperty("--line-strong", g.lineStrong);
+    // briefly suppress transitions so var-based colors repaint cleanly
+    document.documentElement.classList.add("ax-tweaking");
+    requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.remove("ax-tweaking")));
+  }, [t.accent, t.ground]);
+
+  // motion preference from tweak
+  useEffect(() => {
+    window.__axisReduceMotion = !!t.reduceMotion;
+    document.documentElement.setAttribute("data-ax-reduce", t.reduceMotion ? "1" : "0");
+  }, [t.reduceMotion]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => { if (window.lucide) window.lucide.createIcons(); });
+
+  const start = () => setModal(true);
+
+  return (
+    <div id="scrollroot" key={t.reduceMotion ? "rm" : "mo"} style={{ overflowX: "hidden", background: "var(--paper)" }}>
+      <UtilityBar />
+      <SiteNav scrolled={scrolled} onStart={start} />
+      <Hero onStart={start} />
+      <VisaChecker />
+      <TrustStatement />
+      <WhoFor />
+      <Offer onStart={start} />
+      <Process />
+      <Refusals />
+      <WhyAxis />
+      <FounderNote />
+      <FAQ />
+      <DisclaimerBand />
+      <FinalCTA onStart={start} />
+      <Footer onStart={start} />
+      <PreCheckModal open={modal} onClose={() => setModal(false)} />
+
+      <TweaksPanel>
+        <TweakSection label="Brand accent" />
+        <TweakColor label="Accent" value={ACCENTS[t.accent].stamp}
+          options={[ACCENTS.Emerald.stamp, ACCENTS.Terracotta.stamp, ACCENTS.Ocean.stamp]}
+          onChange={(v) => {
+            const name = Object.keys(ACCENTS).find((k) => ACCENTS[k].stamp === v) || "Emerald";
+            setTweak("accent", name);
+          }} />
+        <TweakSection label="Background" />
+        <TweakRadio label="Ground tone" value={t.ground}
+          options={["Bright white", "Warm cream"]}
+          onChange={(v) => setTweak("ground", v)} />
+        <TweakSection label="Motion" />
+        <TweakToggle label="Reduce scroll motion" value={t.reduceMotion}
+          onChange={(v) => setTweak("reduceMotion", v)} />
+      </TweaksPanel>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

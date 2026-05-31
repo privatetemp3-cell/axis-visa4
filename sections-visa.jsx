@@ -2,12 +2,12 @@
 // Sits directly under the hero, before the trust statement.
 // Reuses the Pre-Check form primitives (Field, TextInput, SelectInput, ChoiceRow).
 
-const VC_DESTINATIONS = ["Schengen Area", "South Africa", "Thailand", "Colombia", "Mexico", "UAE", "Other"];
+const VC_DESTINATIONS = ["Schengen Area", "United States", "Thailand", "China", "Colombia", "Brazil", "Mexico", "Other"];
 const VC_PURPOSE = ["Tourism / holiday", "Visiting family or friends", "Short business trip", "Event or conference", "Other"];
 const VC_STAY = ["Up to 1 week", "1–2 weeks", "2–4 weeks", "1–3 months", "Over 3 months"];
 
 const vcEmpty = {
-  fullName: "", email: "", whatsapp: "", nationality: "", residence: "",
+  fullName: "", email: "", nationality: "", residence: "",
   destination: "", purpose: "", stay: "", travelDate: "",
   transiting: "", transitCountries: "", existingVisas: "",
 };
@@ -111,14 +111,9 @@ function VisaChecker() {
                   <Field label="Full name" required>
                     <TextInput value={form.fullName} onChange={set("fullName")} placeholder="Full Name" invalid={touched && !form.fullName.trim()} />
                   </Field>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }} className="visa-pair">
-                    <Field label="Email address" required>
-                      <TextInput type="email" value={form.email} onChange={set("email")} placeholder="you@email.com" invalid={touched && !emailValid} />
-                    </Field>
-                    <Field label="WhatsApp number" hint="Optional">
-                      <TextInput value={form.whatsapp} onChange={set("whatsapp")} placeholder="+00 0000 000000" />
-                    </Field>
-                  </div>
+                  <Field label="Email address" required>
+                    <TextInput type="email" value={form.email} onChange={set("email")} placeholder="you@email.com" invalid={touched && !emailValid} />
+                  </Field>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }} className="visa-pair">
                     <Field label="Passport / nationality">
                       <TextInput value={form.nationality} onChange={set("nationality")} placeholder="e.g. Nigerian" />

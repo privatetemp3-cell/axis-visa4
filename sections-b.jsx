@@ -80,12 +80,12 @@ function Refusals() {
 // Section 8 — why Axis Visa
 function WhyAxis() {
   const points = [
-  ["search-check", "We review before you risk the application fee", "A full pre-submission check means you find the weak points first — not the embassy."],
+  ["send", "Application submission", "End-to-end application support, including collection, review and submission."],
   ["target", "Built for higher-risk travellers", "Our entire process is designed around exactly the cases that get over-scrutinised."],
-  ["layers", "Cleaner documents, stronger evidence", "We help you turn a thin file into a consistent, well-evidenced application pack."],
+  ["layers", "Application gap review", "We turn your documents into a consistent and well-evidenced application."],
   ["receipt", "One fixed, transparent fee", "£109 for the full support — no outcome-based charges, no surprise add-ons."],
   ["user-round-check", "Direct, honest guidance", "Plain advice on where you stand and what to do next, with no false promises."],
-  ["globe", "Non-UK destinations, done properly", "Focused support for non-UK tourist visas, from Schengen to Thailand and beyond."]];
+  ["shield-check", "Absolute privacy", "Axis Visa is registered with the ICO, the Information Commissioner's Office in the UK. Your documents are handled under UK GDPR data protection standards."]];
 
   return (
     <section id="why" style={{ background: "var(--paper)", padding: SECTION_PAD }}>
@@ -177,9 +177,9 @@ function FAQItem({ q, a, open, onToggle }) {
 function FAQ() {
   const faqs = [
   ["Do you guarantee my visa will be approved?", "No. Axis Visa does not make visa decisions and cannot guarantee approval — those decisions rest entirely with the relevant embassy, consulate or immigration authority. What we do is help you reduce avoidable mistakes and prepare stronger supporting evidence before you submit."],
-  ["What exactly do I get for £109?", "A complete pre-submission review of your tourist visa application: a document checklist, a document review, a risk review, an evidence gap review, and final application preparation guidance. It does not include embassy fees, travel bookings, legal representation or any guarantee of approval."],
-  ["Which destinations do you support?", "We support non-UK tourist visas, including the Schengen Area, South Africa, Thailand, Colombia, Mexico, the UAE and other non-UK destinations. We do not advise on UK visitor visas or provide UK immigration advice."],
-  ["Is this legal or immigration advice?", "No. Axis Visa provides preparation and evidence support, not legal representation or immigration advice. We help you organise a cleaner, more consistent application; we do not act as your legal representative."],
+  ["What exactly do I get for £109?", "Start-to-finish service, document collection, review and submission. We provide feedback on risk before submission, looking at evidence gaps and unmet criteria. We also keep up with changing trends at specific consulates to help ensure your application is delivered as the consulate expects. This is not legal representation, and it is not long-term immigration guidance or advice. We cannot guarantee approval; however, there is a refund policy if your application is rejected."],
+  ["Which destinations do you support?", "We support a long list of destinations. The list is always changing depending on current affairs, consulate requirements and destination rules. You can send us an email for our most up-to-date list. We do not provide a service for UK visas."],
+  ["Is this legal or immigration advice?", "No. Axis Visa provides end-to-end support for standard visa applications, not legal representation or immigration advice. We collect, review and submit the application so you do not have to. We act as your application agent, not as your legal representative."],
   ["I have been refused before. Can you still help?", "Yes — these are exactly the cases we are built for. A previous refusal is not the end of the road, but it does need to be addressed properly. We help you understand what likely went wrong and prepare a stronger, more consistent application next time."],
   ["How does the pre-check work?", "Start the pre-check and answer a short set of questions about your situation, documents and destination. There is no charge to complete it. If it makes sense to proceed, we will explain the next steps and the £109 support fee."]];
 

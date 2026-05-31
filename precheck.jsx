@@ -1,13 +1,13 @@
 // Axis Visa — Landing page · Pre-Check wizard modal
 
-const DESTINATIONS = ["Schengen Area", "South Africa", "Thailand", "Colombia", "Mexico", "UAE", "Other"];
+const DESTINATIONS = ["Schengen Area", "United States", "Thailand", "China", "Colombia", "Brazil", "Mexico", "Other"];
 const EMPLOYMENT = ["Employed", "Self-employed / business owner", "Student", "Retired", "Not currently working"];
 const FUNDS = ["Under £2,000", "£2,000 – £5,000", "£5,000 – £10,000", "Over £10,000"];
 const YESNO = ["Yes", "No", "Not sure"];
 const REFUSALS = ["No refusals", "Refused once", "Refused more than once"];
 
 const emptyForm = {
-  fullName: "", email: "", whatsapp: "", nationality: "", residence: "",
+  fullName: "", email: "", nationality: "", residence: "",
   destination: "", travelDate: "", purpose: "", urgent: "",
   employment: "", refusals: "", funds: "", bankStatements: "", evidence: "",
 };
@@ -110,14 +110,9 @@ function PreCheckModal({ open, onClose }) {
                     <Field label="Full name" required>
                       <TextInput value={form.fullName} onChange={set("fullName")} placeholder="Full Name" invalid={touched && !form.fullName.trim()} />
                     </Field>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }} className="field-pair">
-                      <Field label="Email" required>
-                        <TextInput type="email" value={form.email} onChange={set("email")} placeholder="you@email.com" invalid={touched && !emailValid} />
-                      </Field>
-                      <Field label="WhatsApp number" hint="Include country code">
-                        <TextInput value={form.whatsapp} onChange={set("whatsapp")} placeholder="+00 0000 000000" />
-                      </Field>
-                    </div>
+                    <Field label="Email" required>
+                      <TextInput type="email" value={form.email} onChange={set("email")} placeholder="you@email.com" invalid={touched && !emailValid} />
+                    </Field>
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }} className="field-pair">
                       <Field label="Nationality / passport held">
                         <TextInput value={form.nationality} onChange={set("nationality")} placeholder="e.g. Nigerian" />
@@ -189,7 +184,6 @@ function PreCheckModal({ open, onClose }) {
                   <div style={{ background: "var(--paper-2)", border: "1px solid var(--line)", borderRadius: "var(--r-md)", padding: "6px 18px 14px" }}>
                     <ReviewRow label="Full name" value={form.fullName} />
                     <ReviewRow label="Email" value={form.email} />
-                    <ReviewRow label="WhatsApp" value={form.whatsapp} />
                     <ReviewRow label="Nationality" value={form.nationality} />
                     <ReviewRow label="Residence" value={form.residence} />
                     <ReviewRow label="Destination" value={form.destination} />

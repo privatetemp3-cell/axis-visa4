@@ -1,16 +1,12 @@
 // Axis Visa — Landing page · Free Visa Requirement Checker section
-// Sits directly under the hero, before the trust statement.
-// Reuses the Pre-Check form primitives (Field, TextInput, SelectInput, ChoiceRow).
+// Right-side card links directly to Monday WorkForm — no internal form submission.
 
-const VC_DESTINATIONS = ["Schengen Area", "United States", "Thailand", "China", "Colombia", "Brazil", "Mexico", "Other"];
-const VC_PURPOSE = ["Tourism / holiday", "Visiting family or friends", "Short business trip", "Event or conference", "Other"];
-const VC_STAY = ["Up to 1 week", "1–2 weeks", "2–4 weeks", "1–3 months", "Over 3 months"];
+const FREE_REPORT_URL = "https://wkf.ms/4x4L2g4";
 
-const vcEmpty = {
-  fullName: "", email: "", nationality: "", residence: "",
-  destination: "", purpose: "", stay: "", travelDate: "",
-  transiting: "", transitCountries: "", existingVisas: "",
-};
+function openFreeReport(e) {
+  if (e) e.preventDefault();
+  window.open(FREE_REPORT_URL, "_blank", "noopener,noreferrer");
+}
 
 function VCTrustPoint({ icon, children }) {
   return (
@@ -23,41 +19,21 @@ function VCTrustPoint({ icon, children }) {
   );
 }
 
-function VCReportRow({ label, value }) {
-  return (
-    <div style={{ display: "flex", justifyContent: "space-between", gap: 16, padding: "9px 0", borderBottom: "1px solid var(--line)" }}>
-      <span style={{ fontFamily: "var(--font-label)", fontSize: 11, fontWeight: 600, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--fg-3)", flexShrink: 0 }}>{label}</span>
-      <span style={{ fontSize: 13.5, color: value ? "var(--fg-1)" : "var(--fg-3)", fontWeight: value ? 600 : 400, textAlign: "right", fontStyle: value ? "normal" : "italic", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{value || "—"}</span>
-    </div>
-  );
-}
-
 function VisaChecker() {
-  const [form, setForm] = React.useState(vcEmpty);
-  const [touched, setTouched] = React.useState(false);
-  const [done, setDone] = React.useState(false);
-  const ref = React.useRef("AX-VR-" + Math.floor(40000 + Math.random() * 50000));
-  const set = (k) => (v) => setForm((f) => ({ ...f, [k]: v }));
-
   React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); });
 
-  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
-  const valid = form.fullName.trim() && emailValid && form.destination;
-
-  const submit = () => {
-    setTouched(true);
-    if (!valid) return;
-    ref.current = "AX-VR-" + Math.floor(40000 + Math.random() * 50000);
-    setDone(true);
-  };
-
-  const reportDate = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+  const reportItems = [
+    ["map-pin", "Whether a visa appears to be required"],
+    ["arrow-right-left", "Whether transit rules may apply"],
+    ["list-checks", "Recommended next steps"],
+    ["shield-check", "No payment required"],
+  ];
 
   return (
     <section id="visa-checker" style={{ background: "var(--paper-2)", padding: "96px 0 84px", borderBottom: "1px solid var(--line)" }}>
       <div style={{ ...WRAP, display: "grid", gridTemplateColumns: ".92fr 1.08fr", gap: 60, alignItems: "start" }} className="visa-grid">
 
-        {/* LEFT — editorial intro + trust points */}
+        {/* LEFT — editorial intro + trust points (unchanged) */}
         <div>
           <Reveal><Eyebrow style={{ marginBottom: 20 }}>Free visa check</Eyebrow></Reveal>
           <Reveal delay={90}>
@@ -92,121 +68,49 @@ function VisaChecker() {
           </Reveal>
         </div>
 
-        {/* RIGHT — form card (reuses pre-check field styling) */}
+        {/* RIGHT — CTA card linking to Monday WorkForm */}
         <Reveal delay={160} y={26}>
           <div className="visa-card" style={{ background: "var(--card)", border: "1px solid var(--line-strong)", borderRadius: "var(--r-lg)", boxShadow: "var(--shadow-md)", overflow: "hidden" }}>
+
+            {/* Card header */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, padding: "18px 24px", borderBottom: "1px solid var(--line)", background: "var(--paper)" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
                 <Mark size={24} />
                 <span style={{ fontFamily: "var(--font-label)", fontSize: 11, fontWeight: 700, letterSpacing: ".15em", textTransform: "uppercase", color: "var(--fg-2)" }}>
-                  {done ? "Report requested" : "Free visa requirement check"}
+                  Free visa requirement check
                 </span>
               </div>
               <span style={{ fontFamily: "var(--font-label)", fontSize: 11, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--stamp-deep)", background: "var(--stamp-tint)", padding: "4px 10px", borderRadius: "var(--r-pill)", whiteSpace: "nowrap" }}>£0 · Free</span>
             </div>
 
-            {!done && (
-              <div style={{ padding: "24px 24px 22px" }}>
-                <div style={{ display: "grid", gap: 15 }}>
-                  <Field label="Full name" required>
-                    <TextInput value={form.fullName} onChange={set("fullName")} placeholder="Full Name" invalid={touched && !form.fullName.trim()} />
-                  </Field>
-                  <Field label="Email address" required>
-                    <TextInput type="email" value={form.email} onChange={set("email")} placeholder="you@email.com" invalid={touched && !emailValid} />
-                  </Field>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }} className="visa-pair">
-                    <Field label="Passport / nationality">
-                      <TextInput value={form.nationality} onChange={set("nationality")} placeholder="e.g. Nigerian" />
-                    </Field>
-                    <Field label="Country of residence">
-                      <TextInput value={form.residence} onChange={set("residence")} placeholder="Where you live now" />
-                    </Field>
-                  </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }} className="visa-pair">
-                    <Field label="Destination country" required>
-                      <SelectInput value={form.destination} onChange={set("destination")} options={VC_DESTINATIONS} placeholder="Choose a destination" invalid={touched && !form.destination} />
-                    </Field>
-                    <Field label="Travel purpose">
-                      <SelectInput value={form.purpose} onChange={set("purpose")} options={VC_PURPOSE} placeholder="Select a purpose" />
-                    </Field>
-                  </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }} className="visa-pair">
-                    <Field label="Intended length of stay">
-                      <SelectInput value={form.stay} onChange={set("stay")} options={VC_STAY} placeholder="Select length" />
-                    </Field>
-                    <Field label="Intended travel date" hint="An estimate is fine">
-                      <TextInput type="date" value={form.travelDate} onChange={set("travelDate")} />
-                    </Field>
-                  </div>
-                  <Field label="Are you transiting through another country?">
-                    <ChoiceRow value={form.transiting} onChange={set("transiting")} options={["Yes", "No", "Not sure"]} />
-                  </Field>
-                  {form.transiting === "Yes" && (
-                    <Field label="Which transit country or countries?">
-                      <TextInput value={form.transitCountries} onChange={set("transitCountries")} placeholder="e.g. Qatar, then onward" />
-                    </Field>
-                  )}
-                  <Field label="Do you already hold any valid visas or residence permits?" hint="Optional">
-                    <TextInput value={form.existingVisas} onChange={set("existingVisas")} placeholder="e.g. Schengen residence permit" />
-                  </Field>
-                </div>
+            {/* CTA body */}
+            <div style={{ padding: "28px 24px 26px" }}>
+              <p style={{ margin: "0 0 22px", fontSize: 15.5, lineHeight: 1.62, color: "var(--fg-2)", textWrap: "pretty" }}>
+                Tell us your passport, destination and travel route. We'll send you a simple Visa Requirement Report by email — no payment required.
+              </p>
 
-                <div style={{ marginTop: 22 }}>
-                  <Btn variant="primary" size="lg" onClick={submit} style={{ width: "100%", justifyContent: "center" }}>
-                    Get my free visa report <Icon name="arrow-right" size={18} />
-                  </Btn>
-                  {touched && !valid && (
-                    <div style={{ marginTop: 10, fontSize: 12.5, color: "var(--danger)", fontWeight: 500, textAlign: "center" }}>
-                      Add your name, a valid email and a destination.
-                    </div>
-                  )}
-                  <div style={{ marginTop: 12, fontSize: 12.5, color: "var(--fg-3)", textAlign: "center", lineHeight: 1.5 }}>
-                    Free report. No payment required. Sent by email.
+              <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 26 }}>
+                {reportItems.map(([ic, label]) => (
+                  <div key={label} style={{ display: "flex", gap: 11, alignItems: "center", fontSize: 14.5, color: "var(--fg-1)" }}>
+                    <Icon name={ic} size={16} color="var(--stamp-deep)" style={{ flexShrink: 0 }} />
+                    {label}
                   </div>
-                </div>
+                ))}
               </div>
-            )}
 
-            {done && (
-              <div style={{ padding: "28px 24px 24px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 13, marginBottom: 18 }}>
-                  <div style={{ flexShrink: 0, width: 46, height: 46, borderRadius: "50%", background: "var(--stamp-tint)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <Icon name="mail-check" size={23} color="var(--stamp-deep)" />
-                  </div>
-                  <div>
-                    <h3 className="h3" style={{ margin: 0, fontSize: 21 }}>Your Visa Requirement Report is on its way</h3>
-                    <p style={{ margin: "3px 0 0", fontSize: 13.5, color: "var(--fg-2)" }}>We'll email it to <strong style={{ color: "var(--fg-1)" }}>{form.email}</strong> shortly.</p>
-                  </div>
-                </div>
+              <Btn variant="primary" size="lg" onClick={openFreeReport} style={{ width: "100%", justifyContent: "center" }}>
+                Get my free visa report <Icon name="arrow-right" size={18} />
+              </Btn>
 
-                <div style={{ border: "1px solid var(--line)", borderRadius: "var(--r-md)", overflow: "hidden" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", background: "var(--ink)", color: "var(--paper)" }}>
-                    <span style={{ fontFamily: "var(--font-label)", fontSize: 11, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase" }}>Visa requirement report</span>
-                    <span style={{ fontFamily: "var(--font-label)", fontSize: 10.5, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--stamp)", background: "color-mix(in srgb, var(--stamp) 18%, transparent)", padding: "3px 8px", borderRadius: "var(--r-pill)" }}>Preparing</span>
-                  </div>
-                  <div style={{ padding: "4px 16px 14px", background: "var(--card)" }}>
-                    <VCReportRow label="Traveller" value={form.fullName} />
-                    <VCReportRow label="Report date" value={reportDate} />
-                    <VCReportRow label="Reference" value={ref.current} />
-                    <VCReportRow label="Passport / nationality" value={form.nationality} />
-                    <VCReportRow label="Destination" value={form.destination} />
-                    <VCReportRow label="Transit" value={form.transiting === "Yes" ? (form.transitCountries || "Yes") : (form.transiting || "—")} />
-                    <div style={{ display: "flex", justifyContent: "space-between", gap: 16, padding: "11px 0 4px" }}>
-                      <span style={{ fontFamily: "var(--font-label)", fontSize: 11, fontWeight: 600, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--fg-3)" }}>Assessment</span>
-                      <span style={{ fontSize: 13, color: "var(--ochre)", fontWeight: 700, textAlign: "right" }}>Being reviewed — sent by email</span>
-                    </div>
-                  </div>
-                </div>
-
-                <p style={{ margin: "16px 2px 0", fontSize: 12.5, lineHeight: 1.55, color: "var(--fg-3)" }}>
-                  Your full report will confirm whether a visa is required, visa-free, or a transit visa may apply,
-                  with an overall confidence level and recommended next steps.
-                </p>
-                <div style={{ marginTop: 18 }}>
-                  <Btn variant="secondary" onClick={() => { setForm(vcEmpty); setTouched(false); setDone(false); }}>Check another trip</Btn>
-                </div>
+              <div style={{ marginTop: 12, fontSize: 12.5, color: "var(--fg-3)", textAlign: "center", lineHeight: 1.5 }}>
+                Free report. No payment required. Sent by email.
               </div>
-            )}
+
+              <div style={{ marginTop: 18, paddingTop: 18, borderTop: "1px solid var(--line)", fontSize: 12, lineHeight: 1.55, color: "var(--fg-3)" }}>
+                Axis Visa does not provide UK immigration advice and does not advise on UK visitor visas. Visa and entry decisions are made by the relevant embassy, consulate, airline, immigration authority or border authority.
+              </div>
+            </div>
+
           </div>
         </Reveal>
       </div>
@@ -233,9 +137,6 @@ function VisaChecker() {
       <style>{`
         @media (max-width: 900px) {
           #visa-checker .visa-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
-        }
-        @media (max-width: 560px) {
-          #visa-checker .visa-pair { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </section>

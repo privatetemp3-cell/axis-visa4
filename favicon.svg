@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-6 -6 60 60" fill="none">
+  <style>
+    .ms { stroke: #14161C; }
+    @media (prefers-color-scheme: dark) {
+      .ms { stroke: #E8EAF2; }
+    }
+  </style>
+  <circle cx="24" cy="24" r="14.5" class="ms" stroke-width="2.8"/>
+  <line x1="1" y1="24" x2="47" y2="24" class="ms" stroke-width="2.8"/>
+  <circle cx="38.5" cy="24" r="4.2" fill="#2F6FED"/>
+</svg>

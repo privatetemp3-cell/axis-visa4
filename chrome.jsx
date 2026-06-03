@@ -2,9 +2,8 @@
 
 const NAV_LINKS = [
   ["How it works", "process"],
-  ["Who it's for", "who"],
-  ["The offer", "offer"],
-  ["Refusals", "refusals"],
+  ["Pricing", "pricing"],
+  ["Free Visa Report", "visa-checker"],
   ["FAQ", "faq"],
 ];
 
@@ -20,12 +19,12 @@ function UtilityBar() {
     <div style={{ background: "var(--ink)", color: "var(--fg-on-ink-2)" }}>
       <div style={{ ...WRAP, height: 38, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ fontFamily: "var(--font-label)", fontSize: 11, fontWeight: 600, letterSpacing: ".12em", textTransform: "uppercase", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-          We review before you risk the application fee
+          Visa &amp; Travel Authorisation Application Service
         </div>
-        <div style={{ display: "flex", gap: 18, fontFamily: "var(--font-label)", fontSize: 11, fontWeight: 600, letterSpacing: ".12em", textTransform: "uppercase", alignItems: "center" }}>
+        <div style={{ display: "flex", gap: 18, fontFamily: "var(--font-label)", fontSize: 11, fontWeight: 600, letterSpacing: ".12em", textTransform: "uppercase", alignItems: "center", flexShrink: 0 }}>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
             <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--stamp)", display: "inline-block" }}></span>
-            Tourist visa support
+            Apply online
           </span>
         </div>
       </div>
@@ -60,13 +59,12 @@ function SiteNav({ scrolled, onStart }) {
         <nav className="nav-links" style={{ display: "flex", alignItems: "center", gap: 30 }}>
           {NAV_LINKS.map(([l, t]) => <NavLink key={t} target={t}>{l}</NavLink>)}
         </nav>
-        <Btn variant="primary" size="sm" onClick={onStart}>Start pre-check <Icon name="arrow-right" size={15} /></Btn>
+        <Btn variant="primary" size="sm" onClick={onStart}>Start my application <Icon name="arrow-right" size={15} /></Btn>
       </div>
     </header>
   );
 }
 
-// Elegant, visible legal disclaimer band — used near the foot of the page.
 function DisclaimerBand() {
   return (
     <section style={{ background: "var(--paper-2)", borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}>
@@ -77,9 +75,9 @@ function DisclaimerBand() {
         <div style={{ maxWidth: 880 }}>
           <div style={{ fontFamily: "var(--font-label)", fontSize: 11, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--fg-3)", marginBottom: 10 }}>Important — please read</div>
           <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.62, color: "var(--fg-2)", textWrap: "pretty" }}>
-            Axis Visa does not make visa decisions and does not guarantee visa approval. Decisions are made
-            by the relevant embassy, consulate, or immigration authority. Axis Visa helps clients reduce
-            avoidable mistakes and prepare stronger supporting evidence. We do not provide UK immigration advice.
+            Axis Visa does not provide application or immigration services for UK entry clearance.
+            Visa decisions, boarding decisions and final admission are made by the relevant government,
+            airline or border authority. Axis Visa does not guarantee visa approval or entry.
           </p>
         </div>
       </Reveal>
@@ -89,21 +87,24 @@ function DisclaimerBand() {
 
 function Footer({ onStart }) {
   const cols = [
-    ["Service", [["How it works", "process"], ["Who it's for", "who"], ["The offer", "offer"], ["Refusals", "refusals"], ["FAQ", "faq"]]],
-    ["Destinations", [["Schengen Area", "offer"], ["United States", "offer"], ["Thailand", "offer"], ["China", "offer"], ["Colombia", "offer"], ["Brazil", "offer"], ["Mexico", "offer"]]],
+    ["Service", [["How it works", "process"], ["Pricing", "pricing"], ["What we handle", "handles"], ["Free Visa Report", "visa-checker"], ["FAQ", "faq"]]],
   ];
   return (
-    <footer id="footer" style={{ background: "var(--ink)", color: "var(--fg-on-ink-2)", padding: "72px 0 36px" }}>
+    <footer id="footer" style={{ background: "var(--ink)", color: "var(--fg-on-ink-2)", padding: "72px 0 0" }}>
       <div style={WRAP}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: 56, flexWrap: "wrap", paddingBottom: 44, borderBottom: "1px solid var(--line-ink)" }}>
           <div style={{ maxWidth: 340 }}>
             <Logo size={20} paper tagline />
             <p style={{ marginTop: 20, fontSize: 14.5, lineHeight: 1.62, color: "var(--fg-on-ink-2)", maxWidth: 320 }}>
-              Tourist visa application support for higher-risk travellers. Cleaner documents, stronger
-              evidence, a clearer application pack — prepared properly before you submit.
+              Apply online. Upload your documents. Axis Visa handles the application.
             </p>
-            <div style={{ marginTop: 24 }}>
-              <Btn variant="primary" size="sm" onClick={onStart}>Start pre-check <Icon name="arrow-right" size={15} /></Btn>
+            <div style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 8 }}>
+              <a href="mailto:contact@axisvisahq.com" style={{ fontSize: 14, color: "var(--fg-on-ink-2)" }}>contact@axisvisahq.com</a>
+              <a href="https://wa.me/447000000000" style={{ fontSize: 14, color: "var(--fg-on-ink-2)" }}>WhatsApp</a>
+              <span style={{ fontSize: 13, color: "var(--fg-on-ink-3)" }}>Mon–Fri · 09:00–18:00</span>
+            </div>
+            <div style={{ marginTop: 22 }}>
+              <Btn variant="primary" size="sm" onClick={onStart}>Start my application <Icon name="arrow-right" size={15} /></Btn>
             </div>
           </div>
           <div style={{ display: "flex", gap: 56, flexWrap: "wrap" }}>
@@ -111,32 +112,36 @@ function Footer({ onStart }) {
               <div key={h}>
                 <div style={{ fontFamily: "var(--font-label)", fontSize: 11, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--fg-on-ink-3)", marginBottom: 18 }}>{h}</div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                  {items.map(([label, t], i) => (
-                    <a key={i} href={"#" + t} onClick={(e) => { e.preventDefault(); scrollToId(t); }} className="footlink" style={{ fontSize: 14, color: "var(--fg-on-ink-2)", cursor: "pointer", width: "fit-content", whiteSpace: "nowrap" }}>{label}</a>
+                  {items.map(([label, t]) => (
+                    <a key={label} href={"#" + t} onClick={(e) => { e.preventDefault(); scrollToId(t); }} className="footlink" style={{ fontSize: 14, color: "var(--fg-on-ink-2)", cursor: "pointer", whiteSpace: "nowrap" }}>{label}</a>
                   ))}
                 </div>
               </div>
             ))}
             <div>
-              <div style={{ fontFamily: "var(--font-label)", fontSize: 11, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--fg-on-ink-3)", marginBottom: 18 }}>Contact</div>
+              <div style={{ fontFamily: "var(--font-label)", fontSize: 11, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--fg-on-ink-3)", marginBottom: 18 }}>Company</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 12, fontSize: 14, color: "var(--fg-on-ink-2)" }}>
-                <a href="mailto:contact@axisvisahq.com" style={{ color: "inherit" }}>contact@axisvisahq.com</a>
-                <span style={{ color: "var(--fg-on-ink-3)" }}>Mon–Fri · 09:00–18:00</span>
-                <div style={{ fontSize: 13, color: "var(--fg-on-ink-3)", lineHeight: 1.7, marginTop: 4 }}>
+                <a href="mailto:contact@axisvisahq.com" style={{ color: "inherit" }}>Contact us</a>
+                <span style={{ fontSize: 13, color: "var(--fg-on-ink-3)", lineHeight: 1.7 }}>
                   Axis Visa Ltd<br />
                   483 Green Lanes<br />
                   London, England<br />
                   N13 4BS
-                </div>
+                </span>
               </div>
             </div>
           </div>
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", paddingTop: 26, fontFamily: "var(--font-label)", fontSize: 11.5, fontWeight: 500, letterSpacing: ".06em", color: "var(--fg-on-ink-3)", flexWrap: "wrap", gap: 12 }}>
-          <span>© 2026 Axis Visa Ltd · Axis Visa is a UK Limited Company no. 15704239</span>
-          <span style={{ display: "flex", gap: 22, flexWrap: "wrap" }}>
-            <span>Privacy policy</span><span>Terms</span><span>Preparation &amp; evidence · Not legal representation</span>
-          </span>
+        <div style={{ padding: "22px 0 28px", fontSize: 13, lineHeight: 1.6, color: "var(--fg-on-ink-3)", display: "flex", flexDirection: "column", gap: 10 }}>
+          <p style={{ margin: 0, maxWidth: 820 }}>
+            Axis Visa does not provide application or immigration services for UK entry clearance.
+            Visa decisions, boarding decisions and final admission are made by the relevant government, airline or border authority.
+          </p>
+          <div style={{ display: "flex", gap: 22, flexWrap: "wrap", fontSize: 11.5, fontFamily: "var(--font-label)", letterSpacing: ".06em", fontWeight: 500, textTransform: "uppercase" }}>
+            <span>© 2026 Axis Visa Ltd · Company no. 15704239</span>
+            <span>Privacy policy</span>
+            <span>Terms</span>
+          </div>
         </div>
       </div>
       <style>{`.footlink{position:relative}.footlink:hover{color:var(--paper)!important}`}</style>

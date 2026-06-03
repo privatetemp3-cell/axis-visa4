@@ -1,11 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-6 -6 60 60" fill="none">
-  <style>
-    .ms { stroke: #14161C; }
-    @media (prefers-color-scheme: dark) {
-      .ms { stroke: #E8EAF2; }
-    }
-  </style>
-  <circle cx="24" cy="24" r="14.5" class="ms" stroke-width="2.8"/>
-  <line x1="1" y1="24" x2="47" y2="24" class="ms" stroke-width="2.8"/>
-  <circle cx="38.5" cy="24" r="4.2" fill="#2F6FED"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+  <circle cx="24" cy="24" r="14.5" stroke="#14161C" stroke-width="2"/>
+  <line x1="2" y1="24" x2="46" y2="24" stroke="#14161C" stroke-width="2"/>
+  <circle cx="38.5" cy="24" r="3.5" fill="#11C08C"/>
 </svg>

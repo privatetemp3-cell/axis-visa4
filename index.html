@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Axis Visa — Tourist visa support</title>
+<title>Axis Visa — Visa &amp; Travel Authorisation Application Service</title>
+<meta name="description" content="Apply online, upload your documents, and Axis Visa handles your tourist visa or travel authorisation application through to submission, outcome and collection where applicable.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,24 +17,19 @@
   #scrollroot { scrollbar-width: thin; }
   *:focus-visible { outline: 2px solid var(--stamp); outline-offset: 2px; }
   html.ax-tweaking * { transition: none !important; }
-  /* responsive collapses */
   @media (max-width: 900px) {
-    .hero-grid { grid-template-columns: 1fr !important; }
+    .hero-selector-grid { grid-template-columns: 1fr !important; }
     .who-grid { grid-template-columns: 1fr 1fr !important; }
-    .refusal-grid { grid-template-columns: 1fr 1fr !important; }
     .why-grid { grid-template-columns: 1fr !important; }
     .why-cells { grid-template-columns: 1fr 1fr !important; }
-    .offer-grid { grid-template-columns: 1fr !important; }
-    .founder-grid { grid-template-columns: 1fr !important; }
     .nav-links { display: none !important; }
+    .price-grid { grid-template-columns: 1fr !important; }
   }
   @media (max-width: 600px) {
     .who-grid { grid-template-columns: 1fr !important; }
-    .refusal-grid { grid-template-columns: 1fr !important; }
     .why-cells { grid-template-columns: 1fr !important; }
-    .offer-lists { grid-template-columns: 1fr !important; gap: 28px !important; }
-    .proc-row { grid-template-columns: 52px 1fr !important; }
-    .proc-ic { display: none !important; }
+    .sel-grid { grid-template-columns: 1fr !important; }
+    .sel-arrow { display: none !important; }
   }
 </style>
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
@@ -41,6 +37,7 @@
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script src="image-slot.js"></script>
+<script src="countries.js"></script>
 </head>
 <body class="axis">
 <div id="root"></div>
@@ -51,7 +48,6 @@
 <script type="text/babel" src="sections-a.jsx"></script>
 <script type="text/babel" src="sections-visa.jsx"></script>
 <script type="text/babel" src="sections-b.jsx"></script>
-<script type="text/babel" src="precheck.jsx"></script>
 <script type="text/babel" src="tweaks-panel.jsx"></script>
 
 <script type="text/babel">
@@ -59,8 +55,8 @@ const { useState, useEffect } = React;
 
 const ACCENTS = {
   Emerald:    { stamp: "#11C08C", deep: "#0A9067", tint: "#DBF6EC" },
-  Terracotta: { stamp: "#C8663B", deep: "#A24E2A", tint: "#F2E0D5" },
   Ocean:      { stamp: "#2F6FED", deep: "#2057C9", tint: "#DEE8FD" },
+  Terracotta: { stamp: "#C8663B", deep: "#A24E2A", tint: "#F2E0D5" },
 };
 const GROUNDS = {
   "Bright white": { paper: "#FFFFFF", paper2: "#F2F4F9", card: "#FFFFFF", line: "#E6E9F0", lineStrong: "#D3D7E1" },
@@ -68,7 +64,7 @@ const GROUNDS = {
 };
 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "accent": "Ocean",
+  "accent": "Emerald",
   "ground": "Bright white",
   "reduceMotion": false
 }/*EDITMODE-END*/;
@@ -76,9 +72,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const [scrolled, setScrolled] = useState(false);
-  const [modal, setModal] = useState(false);
 
-  // apply accent + ground tokens to :root
   useEffect(() => {
     const a = ACCENTS[t.accent] || ACCENTS.Emerald;
     const g = GROUNDS[t.ground] || GROUNDS["Bright white"];
@@ -93,12 +87,10 @@ function App() {
     r.setProperty("--card", g.card);
     r.setProperty("--line", g.line);
     r.setProperty("--line-strong", g.lineStrong);
-    // briefly suppress transitions so var-based colors repaint cleanly
     document.documentElement.classList.add("ax-tweaking");
     requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.remove("ax-tweaking")));
   }, [t.accent, t.ground]);
 
-  // motion preference from tweak
   useEffect(() => {
     window.__axisReduceMotion = !!t.reduceMotion;
     document.documentElement.setAttribute("data-ax-reduce", t.reduceMotion ? "1" : "0");
@@ -112,31 +104,29 @@ function App() {
 
   useEffect(() => { if (window.lucide) window.lucide.createIcons(); });
 
-  const start = () => setModal(true);
+  // "Start" scrolls to the hero selector
+  const start = () => scrollToId("top");
 
   return (
     <div id="scrollroot" key={t.reduceMotion ? "rm" : "mo"} style={{ overflowX: "hidden", background: "var(--paper)" }}>
       <UtilityBar />
       <SiteNav scrolled={scrolled} onStart={start} />
-      <Hero onStart={start} />
-      <VisaChecker />
-      <TrustStatement />
+      <Hero />
+      <HowItWorks />
+      <Pricing onStart={start} />
+      <WhatWeHandle />
       <WhoFor />
-      <Offer onStart={start} />
-      <Process />
-      <Refusals />
+      <VisaChecker />
       <WhyAxis />
-      <FounderNote />
       <FAQ />
       <DisclaimerBand />
       <FinalCTA onStart={start} />
       <Footer onStart={start} />
-      <PreCheckModal open={modal} onClose={() => setModal(false)} />
 
       <TweaksPanel>
         <TweakSection label="Brand accent" />
         <TweakColor label="Accent" value={ACCENTS[t.accent].stamp}
-          options={[ACCENTS.Emerald.stamp, ACCENTS.Terracotta.stamp, ACCENTS.Ocean.stamp]}
+          options={[ACCENTS.Emerald.stamp, ACCENTS.Ocean.stamp, ACCENTS.Terracotta.stamp]}
           onChange={(v) => {
             const name = Object.keys(ACCENTS).find((k) => ACCENTS[k].stamp === v) || "Emerald";
             setTweak("accent", name);

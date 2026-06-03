@@ -1,4 +1,4 @@
-// Axis Visa — Landing page · shared primitives (forked from website kit)
+// Axis Visa — Landing page · shared primitives
 
 function Mark({ size = 34, paper = false }) {
   const stroke = paper ? "#F4F6FB" : "var(--ink)";
@@ -25,7 +25,7 @@ function Logo({ paper = false, size = 21, tagline = false }) {
           <div style={{
             fontFamily: "var(--font-label)", fontSize: 9.5, letterSpacing: ".22em", fontWeight: 600,
             textTransform: "uppercase", color: "var(--stamp-deep)", marginTop: 4,
-          }}>Tourist visa support</div>
+          }}>Visa application service</div>
         )}
       </div>
     </div>
@@ -52,7 +52,7 @@ function Btn({ children, variant = "primary", onClick, paper = false, size = "md
     borderRadius: "var(--r-sm)", padding: pad, cursor: "pointer",
     border: "1px solid transparent", display: "inline-flex", alignItems: "center",
     gap: 9, lineHeight: 1, whiteSpace: "nowrap",
-    transition: "transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease)",
+    transition: "transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), background var(--dur) var(--ease)",
     transform: h ? "translateY(-1px)" : "translateY(0)", ...style,
   };
   const variants = {
@@ -74,7 +74,7 @@ function Icon({ name, size = 18, color = "currentColor", style }) {
 
 const WRAP = { maxWidth: 1200, margin: "0 auto", padding: "0 40px", width: "100%", boxSizing: "border-box" };
 
-// ---- Form field primitives (used by the Pre-Check wizard) ----
+// ---- Form field primitives (used by forms) ----
 
 function Field({ label, hint, children, required }) {
   return (
@@ -125,7 +125,6 @@ function SelectInput({ value, onChange, options, placeholder, invalid }) {
   );
 }
 
-// Segmented choice (used for yes/no/unsure style answers)
 function ChoiceRow({ value, onChange, options }) {
   return (
     <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Start Your Application — Axis Visa</title>
+<meta name="description" content="Start your visa or travel authorisation application with Axis Visa. Apply online, upload your documents, and we handle the rest.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+  html, body { margin: 0; }
+  body { background: var(--paper); }
+  ::selection { background: var(--stamp-tint); }
+  *:focus-visible { outline: 2px solid var(--stamp); outline-offset: 2px; }
+  @media (max-width: 900px) {
+    .start-grid { grid-template-columns: 1fr !important; }
+    .nav-links { display: none !important; }
+    .sel-grid { grid-template-columns: 1fr !important; }
+    .sel-arrow { display: none !important; }
+  }
+  @media (max-width: 600px) {
+    .sel-grid { grid-template-columns: 1fr !important; }
+    .sel-arrow { display: none !important; }
+  }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="image-slot.js"></script>
+<script src="countries.js"></script>
+</head>
+<body class="axis">
+<div id="root"></div>
+
+<script type="text/babel" src="reveal.jsx"></script>
+<script type="text/babel" src="primitives.jsx"></script>
+<script type="text/babel" src="chrome.jsx"></script>
+<script type="text/babel" src="sections-a.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const PAYMENT_LINK_TOURIST = "https://buy.stripe.com/4gM4gA4OT71kbPM6Pf7ok00";
+const PAYMENT_LINK_ETA = "https://buy.stripe.com/dRm8wQgxBadw1b86Pf7ok01";
+const UPLOAD_FORM_LINK = "https://wkf.ms/4x4L2g4";
+
+// ESTA / ETA destinations where the £40 flat charge applies
+const ETA_CODES = new Set(["US", "CA", "AU", "NZ", "MY", "SG", "BN", "IN"]);
+
+function getCountryName(code) {
+  const c = window.COUNTRIES.find((x) => x.code === code);
+  return c ? c.name : code;
+}
+
+function RouteTag({ children }) {
+  return (
+    <span style={{
+      display: "inline-flex", alignItems: "center", gap: 6,
+      fontFamily: "var(--font-label)", fontSize: 11, fontWeight: 700, letterSpacing: ".12em",
+      textTransform: "uppercase", color: "var(--stamp-deep)",
+      background: "var(--stamp-tint)", padding: "5px 12px", borderRadius: "var(--r-pill)",
+    }}>{children}</span>
+  );
+}
+
+function RouteConfirmed({ passportCode, destCode }) {
+  const passportName = getCountryName(passportCode);
+  const destName = getCountryName(destCode);
+  const isEta = ETA_CODES.has(destCode);
+
+  const serviceFee = isEta ? "£40" : "£109";
+  const serviceLabel = isEta ? "ESTA / eTA / electronic travel authorisation" : "Tourist visa application";
+  const feeNote = isEta
+    ? "Flat charge — official government fee included where applicable."
+    : "Axis Visa service fee. Official visa fees are charged separately at cost.";
+
+  const paymentHref = (isEta ? PAYMENT_LINK_ETA : PAYMENT_LINK_TOURIST) + "?passport=" + passportCode + "&destination=" + destCode;
+
+  useEffect(() => { if (window.lucide) window.lucide.createIcons(); });
+
+  return (
+    <div style={{ background: "var(--paper)", minHeight: "100vh" }}>
+      {/* Page header */}
+      <div style={{ background: "var(--paper-2)", borderBottom: "1px solid var(--line)", padding: "56px 0 52px" }}>
+        <div style={WRAP}>
+          <Eyebrow style={{ marginBottom: 16 }}>Your application</Eyebrow>
+          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "clamp(28px,3.5vw,44px)", letterSpacing: "-.03em", lineHeight: 1.1, margin: "0 0 20px", color: "var(--ink)" }}>
+            Start your application
+          </h1>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+            <RouteTag>{passportName}</RouteTag>
+            <Icon name="arrow-right" size={16} color="var(--fg-3)" />
+            <RouteTag>{destName}</RouteTag>
+          </div>
+        </div>
+      </div>
+
+      {/* Body */}
+      <div style={{ ...WRAP, padding: "56px 40px 96px", display: "grid", gridTemplateColumns: "1fr 380px", gap: 40, alignItems: "start", boxSizing: "border-box" }} className="start-grid">
+
+        {/* Left column */}
+        <div>
+          {/* Route card */}
+          <div style={{ background: "var(--card)", border: "1px solid var(--line-strong)", borderRadius: "var(--r-lg)", overflow: "hidden", marginBottom: 20 }}>
+            <div style={{ padding: "18px 24px", borderBottom: "1px solid var(--line)", background: "var(--paper)", display: "flex", alignItems: "center", gap: 10 }}>
+              <Icon name="map" size={17} color="var(--fg-2)" />
+              <span style={{ fontFamily: "var(--font-label)", fontSize: 11, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--fg-2)" }}>Application route</span>
+            </div>
+            <div style={{ padding: "24px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: 16, marginBottom: 20 }}>
+                <div style={{ background: "var(--paper-2)", border: "1px solid var(--line)", borderRadius: "var(--r-sm)", padding: "14px 16px" }}>
+                  <div style={{ fontFamily: "var(--font-label)", fontSize: 10, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--fg-3)", marginBottom: 5 }}>Passport</div>
+                  <div style={{ fontFamily: "var(--font-text)", fontWeight: 600, fontSize: 15, color: "var(--fg-1)" }}>{passportName}</div>
+                </div>
+                <Icon name="arrow-right" size={18} color="var(--fg-3)" />
+                <div style={{ background: "var(--paper-2)", border: "1px solid var(--line)", borderRadius: "var(--r-sm)", padding: "14px 16px" }}>
+                  <div style={{ fontFamily: "var(--font-label)", fontSize: 10, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--fg-3)", marginBottom: 5 }}>Destination</div>
+                  <div style={{ fontFamily: "var(--font-text)", fontWeight: 600, fontSize: 15, color: "var(--fg-1)" }}>{destName}</div>
+                </div>
+              </div>
+              <a href="/" style={{ fontSize: 13, color: "var(--fg-3)" }}>
+                Not right? <span style={{ color: "var(--stamp-deep)", textDecoration: "underline", cursor: "pointer" }}>Change your route</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Steps card */}
+          <div style={{ background: "var(--card)", border: "1px solid var(--line-strong)", borderRadius: "var(--r-lg)", overflow: "hidden", marginBottom: 20 }}>
+            <div style={{ padding: "18px 24px", borderBottom: "1px solid var(--line)", background: "var(--paper)", display: "flex", alignItems: "center", gap: 10 }}>
+              <Icon name="list-checks" size={17} color="var(--fg-2)" />
+              <span style={{ fontFamily: "var(--font-label)", fontSize: 11, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--fg-2)" }}>What happens next</span>
+            </div>
+            <div style={{ padding: "24px" }}>
+              {[
+                ["1", "credit-card", "Pay the service fee", "Complete payment to open your application. You'll receive confirmation within one working day."],
+                ["2", "upload", "Upload your documents", "Once payment is confirmed, upload your supporting documents via our secure form."],
+                ["3", "send", "We handle the application", "Axis Visa reviews your documents, prepares your application, and submits it on your behalf."],
+              ].map(([n, ic, t, d]) => (
+                <div key={n} style={{ display: "flex", gap: 16, marginBottom: 20 }}>
+                  <div style={{ flexShrink: 0, width: 30, height: 30, borderRadius: "50%", background: "var(--stamp-tint)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ fontFamily: "var(--font-label)", fontSize: 12, fontWeight: 800, color: "var(--stamp-deep)" }}>{n}</span>
+                  </div>
+                  <div style={{ paddingTop: 4 }}>
+                    <div style={{ fontFamily: "var(--font-text)", fontWeight: 600, fontSize: 15, color: "var(--fg-1)", marginBottom: 4 }}>{t}</div>
+                    <p style={{ margin: 0, fontSize: 14, color: "var(--fg-2)", lineHeight: 1.55 }}>{d}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* CTA card */}
+          <div style={{ background: "var(--card)", border: "1px solid var(--line-strong)", borderRadius: "var(--r-lg)", overflow: "hidden" }}>
+            <div style={{ padding: "18px 24px", borderBottom: "1px solid var(--line)", background: "var(--stamp)", display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ fontFamily: "var(--font-label)", fontSize: 11, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "#fff" }}>Ready to proceed</span>
+            </div>
+            <div style={{ padding: "28px 24px" }}>
+              <div style={{ marginBottom: 16 }}>
+                <div style={{ fontFamily: "var(--font-label)", fontSize: 11, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--fg-3)", marginBottom: 6 }}>
+                  {serviceLabel}
+                </div>
+                <div style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 36, letterSpacing: "-.03em", color: "var(--ink)", lineHeight: 1, marginBottom: 4 }}>
+                  {serviceFee}
+                </div>
+                <div style={{ fontSize: 13, color: "var(--fg-3)", lineHeight: 1.5 }}>{feeNote}</div>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 22 }}>
+                <a href={paymentHref} style={{ textDecoration: "none" }}>
+                  <Btn variant="primary" size="lg" style={{ width: "100%", justifyContent: "center" }}>
+                    Continue to payment <Icon name="arrow-right" size={17} />
+                  </Btn>
+                </a>
+                <a href={UPLOAD_FORM_LINK} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+                  <Btn variant="secondary" size="md" style={{ width: "100%", justifyContent: "center" }}>
+                    Upload documents <Icon name="upload" size={16} />
+                  </Btn>
+                </a>
+              </div>
+              <p style={{ margin: "16px 0 0", fontSize: 12.5, color: "var(--fg-3)", lineHeight: 1.55 }}>
+                Payment is processed securely. Axis Visa will be in touch within one working day to confirm your application is open.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Right — summary sidebar */}
+        <div>
+          <div style={{ background: "var(--card)", border: "1px solid var(--line-strong)", borderRadius: "var(--r-lg)", overflow: "hidden", position: "sticky", top: 90 }}>
+            <div style={{ padding: "18px 22px", borderBottom: "1px solid var(--line)", background: "var(--paper)", display: "flex", alignItems: "center", gap: 10 }}>
+              <Icon name="info" size={16} color="var(--fg-2)" />
+              <span style={{ fontFamily: "var(--font-label)", fontSize: 11, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--fg-2)" }}>Pricing summary</span>
+            </div>
+            <div style={{ padding: "22px" }}>
+              {[
+                ["Tourist visa applications", "£109", "Axis Visa service fee + official visa fees at cost"],
+                ["ESTA / eTA / electronic travel authorisations", "£40", "Flat charge — official fee included where applicable"],
+              ].map(([label, price, note]) => (
+                <div key={label} style={{ marginBottom: 20, paddingBottom: 20, borderBottom: "1px solid var(--line)" }}>
+                  <div style={{ fontFamily: "var(--font-text)", fontWeight: 600, fontSize: 14, color: "var(--fg-1)", marginBottom: 4 }}>{label}</div>
+                  <div style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 26, letterSpacing: "-.03em", color: "var(--ink)", lineHeight: 1, marginBottom: 4 }}>{price}</div>
+                  <div style={{ fontSize: 12, color: "var(--fg-3)", lineHeight: 1.5 }}>{note}</div>
+                </div>
+              ))}
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                <Icon name="shield-check" size={15} color="var(--stamp-deep)" style={{ flexShrink: 0, marginTop: 2 }} />
+                <p style={{ margin: 0, fontSize: 12, color: "var(--fg-2)", lineHeight: 1.55 }}>
+                  Axis Visa does not guarantee visa approval or entry. Decisions are made by the relevant government authority, airline or border authority.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ marginTop: 16, padding: "18px 20px", background: "var(--paper-2)", border: "1px solid var(--line)", borderRadius: "var(--r-md)" }}>
+            <div style={{ fontFamily: "var(--font-label)", fontSize: 10, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--fg-3)", marginBottom: 8 }}>Need help?</div>
+            <p style={{ margin: "0 0 10px", fontSize: 13.5, color: "var(--fg-2)", lineHeight: 1.5 }}>
+              Questions before you proceed? Contact us.
+            </p>
+            <a href="mailto:contact@axisvisahq.com" style={{ fontSize: 13.5, color: "var(--stamp-deep)", fontWeight: 600 }}>contact@axisvisahq.com</a>
+            <div style={{ marginTop: 4, fontSize: 12, color: "var(--fg-3)" }}>Mon–Fri · 09:00–18:00</div>
+          </div>
+        </div>
+
+      </div>
+
+      {/* Legal */}
+      <div style={{ background: "var(--paper-2)", borderTop: "1px solid var(--line)", padding: "32px 0" }}>
+        <div style={{ ...WRAP, display: "flex", gap: 18, alignItems: "flex-start" }}>
+          <div style={{ flexShrink: 0, width: 36, height: 36, borderRadius: "50%", border: "1px solid var(--line-strong)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Icon name="scale" size={17} color="var(--fg-3)" />
+          </div>
+          <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: "var(--fg-3)", maxWidth: 860 }}>
+            Axis Visa does not provide application or immigration services for UK entry clearance.
+            Visa decisions, boarding decisions and final admission are made by the relevant government,
+            airline or border authority. Axis Visa does not guarantee visa approval or entry.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function NoRoute() {
+  useEffect(() => { if (window.lucide) window.lucide.createIcons(); });
+  return (
+    <div style={{ background: "var(--paper)", minHeight: "80vh" }}>
+      <div style={{ background: "var(--paper-2)", borderBottom: "1px solid var(--line)", padding: "56px 0 52px" }}>
+        <div style={WRAP}>
+          <Eyebrow style={{ marginBottom: 16 }}>Start your application</Eyebrow>
+          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "clamp(28px,3.5vw,44px)", letterSpacing: "-.03em", lineHeight: 1.1, margin: "0 0 12px", color: "var(--ink)" }}>
+            Select your passport and destination
+          </h1>
+          <p style={{ margin: 0, fontSize: 17, color: "var(--fg-2)", lineHeight: 1.55 }}>
+            Tell us where you're from and where you're going to get started.
+          </p>
+        </div>
+      </div>
+      <div style={{ ...WRAP, padding: "56px 40px 96px" }}>
+        <PassportSelector />
+      </div>
+    </div>
+  );
+}
+
+function StartApp() {
+  const [scrolled, setScrolled] = useState(false);
+  const params = new URLSearchParams(window.location.search);
+  const passportCode = params.get("passport");
+  const destCode = params.get("destination");
+  const hasRoute = passportCode && destCode && window.COUNTRIES.find((c) => c.code === passportCode) && window.COUNTRIES.find((c) => c.code === destCode);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => { if (window.lucide) window.lucide.createIcons(); });
+
+  return (
+    <div style={{ overflowX: "hidden" }}>
+      <UtilityBar />
+      <SiteNav scrolled={scrolled} onStart={() => { window.location.href = "/"; }} />
+      {hasRoute
+        ? <RouteConfirmed passportCode={passportCode} destCode={destCode} />
+        : <NoRoute />}
+      <Footer onStart={() => { window.location.href = "/"; }} />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<StartApp />);
+</script>
+</body>
+</html>

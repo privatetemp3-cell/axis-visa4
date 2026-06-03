@@ -33,22 +33,21 @@ function VisaChecker() {
     <section id="visa-checker" style={{ background: "var(--paper-2)", padding: "96px 0 84px", borderBottom: "1px solid var(--line)" }}>
       <div style={{ ...WRAP, display: "grid", gridTemplateColumns: ".92fr 1.08fr", gap: 60, alignItems: "start" }} className="visa-grid">
 
-        {/* LEFT — editorial intro + trust points (unchanged) */}
         <div>
           <Reveal><Eyebrow style={{ marginBottom: 20 }}>Free visa check</Eyebrow></Reveal>
           <Reveal delay={90}>
-            <h2 className="h2" style={{ margin: "0 0 14px" }}>Do you need a visa?</h2>
+            <h2 className="h2" style={{ margin: "0 0 14px" }}>Not sure if you need a visa?</h2>
           </Reveal>
           <Reveal delay={160}>
             <p className="lead" style={{ margin: "0 0 22px", maxWidth: 460 }}>
-              Free Visa Report sent to you via email.
+              Get a free Visa Requirement Report by email.
             </p>
           </Reveal>
           <Reveal delay={220}>
             <p style={{ margin: "0 0 32px", fontSize: 16, lineHeight: 1.62, color: "var(--fg-2)", maxWidth: 470, textWrap: "pretty" }}>
-              Enter your passport, destination and travel route. Axis Visa will send you a simple Visa
-              Requirement Report showing whether a visa appears to be required, whether transit rules may
-              apply, and what your next step should be.
+              Tell us your passport, your destination and your travel route. Axis Visa will send you a
+              simple Visa Requirement Report — showing whether a visa appears to be required, whether
+              transit rules may apply, and what your next step should be.
             </p>
           </Reveal>
           <Reveal delay={280}>
@@ -59,20 +58,18 @@ function VisaChecker() {
             </div>
           </Reveal>
           <Reveal delay={340}>
-            <div style={{ background: "color-mix(in srgb, var(--ochre) 9%, var(--card))", border: "1px solid color-mix(in srgb, var(--ochre) 26%, var(--line))", borderRadius: "var(--r-md)", padding: "18px 20px", maxWidth: 470 }}>
+            <div style={{ background: "color-mix(in srgb, var(--stamp-tint) 40%, var(--card))", border: "1px solid color-mix(in srgb, var(--stamp) 20%, var(--line))", borderRadius: "var(--r-md)", padding: "18px 20px", maxWidth: 470 }}>
               <div style={{ fontFamily: "var(--font-label)", fontSize: 11, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--fg-2)", marginBottom: 7 }}>Not the same as our paid service</div>
               <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.55, color: "var(--fg-2)" }}>
-                This free report only checks whether a visa appears to be required. Our <strong style={{ color: "var(--fg-1)" }}>£109 Tourist Visa Application Support</strong> is the full service for preparing your application.
+                This free report only checks whether a visa appears to be required. Our <strong style={{ color: "var(--fg-1)" }}>Tourist Visa Application Service (£109)</strong> is the full service for preparing and submitting your application.
               </p>
             </div>
           </Reveal>
         </div>
 
-        {/* RIGHT — CTA card linking to Monday WorkForm */}
         <Reveal delay={160} y={26}>
           <div className="visa-card" style={{ background: "var(--card)", border: "1px solid var(--line-strong)", borderRadius: "var(--r-lg)", boxShadow: "var(--shadow-md)", overflow: "hidden" }}>
 
-            {/* Card header */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, padding: "18px 24px", borderBottom: "1px solid var(--line)", background: "var(--paper)" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
                 <Mark size={24} />
@@ -83,7 +80,6 @@ function VisaChecker() {
               <span style={{ fontFamily: "var(--font-label)", fontSize: 11, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--stamp-deep)", background: "var(--stamp-tint)", padding: "4px 10px", borderRadius: "var(--r-pill)", whiteSpace: "nowrap" }}>£0 · Free</span>
             </div>
 
-            {/* CTA body */}
             <div style={{ padding: "28px 24px 26px" }}>
               <p style={{ margin: "0 0 22px", fontSize: 15.5, lineHeight: 1.62, color: "var(--fg-2)", textWrap: "pretty" }}>
                 Tell us your passport, destination and travel route. We'll send you a simple Visa Requirement Report by email — no payment required.
@@ -115,7 +111,6 @@ function VisaChecker() {
         </Reveal>
       </div>
 
-      {/* disclaimer — duplicates the site disclaimer-band style */}
       <Reveal as="div" style={{ ...WRAP, marginTop: 56 }}>
         <div style={{ display: "flex", gap: 20, alignItems: "flex-start", borderTop: "1px solid var(--line-strong)", paddingTop: 26 }}>
           <div style={{ flexShrink: 0, width: 38, height: 38, borderRadius: "50%", border: "1px solid var(--line-strong)", display: "flex", alignItems: "center", justifyContent: "center", marginTop: 2 }}>

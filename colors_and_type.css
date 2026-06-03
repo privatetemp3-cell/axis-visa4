@@ -26,13 +26,13 @@
   --line-strong:#D3D7E1;  /* heavier rule */
   --line-ink:   rgba(255,255,255,0.14); /* hairline on ink surfaces */
 
-  /* ---- Accents — single bright emerald-teal signal -------- */
-  --stamp:      #11C08C;  /* primary accent — bright emerald-teal */
-  --stamp-deep: #0A9067;  /* pressed / hover-dark / accent text on white */
-  --stamp-tint: #DBF6EC;  /* wash background */
+  /* ---- Accents — royal blue -------------------------------- */
+  --stamp:      #2F6FED;  /* primary accent — royal blue */
+  --stamp-deep: #2057C9;  /* pressed / hover-dark / accent text on white */
+  --stamp-tint: #DEE8FD;  /* wash background */
 
-  --atlas:      #0A9067;  /* success / verified — deeper emerald */
-  --atlas-tint: #D6F1E3;
+  --atlas:      #2057C9;  /* success / verified — deep blue */
+  --atlas-tint: #DEE8FD;
 
   --ochre:      #C0871A;  /* highlight / warning */
   --ochre-tint: #F6E9C7;
